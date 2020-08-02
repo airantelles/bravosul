@@ -1,0 +1,32 @@
+<div class="container bg-light" style="margin-top: 0px; min-height: 50px; border-radius: 5px;">
+  <label style="font-size: 24px; margin-left: 15px; margin-top: 5px;">Product list</label>
+  <button *ngIf="IsLogged()" class="btn btn-default float-right button-create">Create</button>
+</div>
+<div class="container bg-light" style="margin-top: 20px; border-radius: 5px;">
+  <div class="col-12 table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th *ngIf="IsLogged()">Enabled</th>
+          <th *ngIf="IsLogged()">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+
+          <td>{{product.id}}</td>
+          <td>{{product.name}}</td>
+          <td>{{product.description}}</td>
+          <td *ngIf="IsLogged()">{{product.enabled}}</td>
+          <td *ngIf="IsLogged()">
+            <button class="btn btn-primary">Edit</button>
+            <button class="btn btn-danger" style="margin-left: 0.5em;">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

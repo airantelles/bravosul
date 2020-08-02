@@ -1,10 +1,62 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { catchError, retry } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: []
 })
-export class AppComponent {
-  title = 'bravosul';
+
+export class AppComponent{
+  closeResult: string;
+  private _loginUrl = 'https://bravosul-app.herokuapp.com/auth/local';
+
+  constructor(private modalService: NgbModal, private _http: HttpClient) {}
+
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  Login(email, password) {
+    console.log(this.IsLogged());
+    const myheader = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    let body = new HttpParams();
+    body = body.set('identifier', email);
+    body = body.set('password', password);
+    this._http.post(this._loginUrl, body, {headers: myheader}).subscribe(
+      data => {
+        localStorage.setItem('user', JSON.stringify(data));
+      },
+      error => {
+        console.log("Erro");
+      }
+    );
+  }
+
+  IsLogged(){
+    return localStorage.getItem('user') !== null
+  }
+
+  Logout(){
+    localStorage.removeItem('user');
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
 }
