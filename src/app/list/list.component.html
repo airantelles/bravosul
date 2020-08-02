@@ -1,6 +1,6 @@
 <div class="container bg-light" style="margin-top: 0px; min-height: 50px; border-radius: 5px;">
-  <label style="font-size: 24px; margin-left: 15px; margin-top: 5px;">Product list</label>
-  <button *ngIf="IsLogged()" class="btn btn-default float-right button-create">Create</button>
+  <label style="font-size: 24px; margin-left: 25px; margin-top: 5px;">Product list</label>
+  <button *ngIf="IsLogged()" class="btn btn-default float-right button-create" (click)="open(product)">Create</button>
 </div>
 <div class="container bg-light" style="margin-top: 20px; border-radius: 5px;">
   <div class="col-12 table-responsive">
@@ -11,22 +11,46 @@
           <th>Name</th>
           <th>Description</th>
           <th *ngIf="IsLogged()">Enabled</th>
-          <th *ngIf="IsLogged()">Actions</th>
+          <th *ngIf="IsLogged()" class="text-right">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let product of products">
-
+        <tr *ngFor="let product of products" [hidden]="!IsLogged() && !product.enabled">
           <td>{{product.id}}</td>
           <td>{{product.name}}</td>
           <td>{{product.description}}</td>
-          <td *ngIf="IsLogged()">{{product.enabled}}</td>
           <td *ngIf="IsLogged()">
+            <span *ngIf="product.enabled">Yes</span>
+            <span *ngIf="!product.enabled">No</span>
+          </td>
+          <td *ngIf="IsLogged()" class="text-right">
             <button class="btn btn-primary">Edit</button>
-            <button class="btn btn-danger" style="margin-left: 0.5em;">Delete</button>
+            <button class="btn btn-danger" style="margin-left: 0.5em;" (click)="Destroy(product.id)">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
+<ng-template #product let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">New product</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="nameProduct">Nome</label>
+      <input type="text" class="form-control" id="nameProduct" #name>
+    </div>
+    <div class="form-group">
+      <label for="descriptionProduct">Description</label>
+      <input type="text" class="form-control" id="descriptionProduct" #description>
+    </div>
+    <div class="btn-group float-right">
+      <button type="button" class="btn btn-secondary" [ngClass]="{'active': enabled == 1, '':enabled == 0 }" (click)="enabled = 1">Enabled</button>
+      <button type="button" class="btn btn-secondary" [ngClass]="{'active': enabled == 0, '':enabled == 1 }" (click)="enabled = 0">Disabled</button>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="Create(name.value, description.value, enabled)">Save</button>
+  </div>
+</ng-template>

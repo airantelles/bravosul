@@ -26,6 +26,9 @@
       <label for="exampleInputPassword1">Password</label>
       <input type="password" class="form-control" id="inputPassword" #password>
     </div>
+    <div class="alert alert-danger" role="alert" *ngIf="loginError">
+      Email or password incorrect!
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="Login(email.value, password.value)">Login</button>

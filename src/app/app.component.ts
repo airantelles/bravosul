@@ -15,6 +15,7 @@ import { Observable, throwError } from 'rxjs';
 export class AppComponent{
   closeResult: string;
   private _loginUrl = 'https://bravosul-app.herokuapp.com/auth/local';
+  loginError = false;
 
   constructor(private modalService: NgbModal, private _http: HttpClient) {}
 
@@ -27,7 +28,6 @@ export class AppComponent{
   }
 
   Login(email, password) {
-    console.log(this.IsLogged());
     const myheader = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     let body = new HttpParams();
     body = body.set('identifier', email);
@@ -35,9 +35,11 @@ export class AppComponent{
     this._http.post(this._loginUrl, body, {headers: myheader}).subscribe(
       data => {
         localStorage.setItem('user', JSON.stringify(data));
+        this.loginError = false;
+        this.modalService.dismissAll("#login");
       },
       error => {
-        console.log("Erro");
+        this.loginError = true;
       }
     );
   }
