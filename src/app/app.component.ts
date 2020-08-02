@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { catchError, retry } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-root',

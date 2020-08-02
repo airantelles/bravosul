@@ -15,17 +15,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let product of products" [hidden]="!IsLogged() && !product.enabled">
-          <td>{{product.id}}</td>
-          <td>{{product.name}}</td>
-          <td>{{product.description}}</td>
+        <tr *ngFor="let item of products" [hidden]="!IsLogged() && !item.enabled">
+          <td>{{item.id}}</td>
+          <td>{{item.name}}</td>
+          <td>{{item.description}}</td>
           <td *ngIf="IsLogged()">
-            <span *ngIf="product.enabled">Yes</span>
-            <span *ngIf="!product.enabled">No</span>
+            <span *ngIf="item.enabled">Yes</span>
+            <span *ngIf="!item.enabled">No</span>
           </td>
           <td *ngIf="IsLogged()" class="text-right">
-            <button class="btn btn-primary">Edit</button>
-            <button class="btn btn-danger" style="margin-left: 0.5em;" (click)="Destroy(product.id)">Delete</button>
+            <button class="btn btn-primary" (click)="open(product, item)">Edit</button>
+            <button class="btn btn-danger" style="margin-left: 0.5em;" (click)="Destroy(item.id)">Delete</button>
           </td>
         </tr>
       </tbody>
@@ -35,6 +35,7 @@
 <ng-template #product let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">New product</h4>
+    <input class="d-none" id="idProduct" #id>
   </div>
   <div class="modal-body">
     <div class="form-group">
@@ -51,6 +52,6 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="Create(name.value, description.value, enabled)">Save</button>
+    <button type="button" class="btn btn-outline-dark" (click)="CreateOrUpdate(name.value, description.value, enabled, id.value)">Save</button>
   </div>
 </ng-template>
